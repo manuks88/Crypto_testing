@@ -85,6 +85,12 @@ function gcm_test()
 	AEAD_name="gcm(aes)"
 
 	iv_size=$((( RANDOM % 100 )+ 1))
+	if [ $iv_size == 1 ]
+	then
+	{
+		iv_size=2
+	}
+	fi
 	iv=$(tr -c -d 0-9 < /dev/urandom | head -c $iv_size)
 
 	for (( iter=1;iter<$user_input;iter++ ))
