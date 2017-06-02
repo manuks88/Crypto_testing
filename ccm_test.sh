@@ -66,6 +66,23 @@ for data_item in "${data_input[@]}"
         count=$((count+1))
 }
 
+function printdebug()
+{
+        echo -e "${debug}
+        Keylen=$keylen
+        Key=$key
+        Nonce_size=$noncelen
+        Nonce=$nonce
+        Assoc_len=$assoclen
+        Assoc=$assoc
+        Taglen=$taglen
+        Encrypted=$enc
+        Tag_data=$tag_data
+        Data_item=$data_item
+        Decrypted=$dec
+        ECMD=$ecmd
+        DCMD=$dcmd${off}\n"
+}
 
 function ccm_test()
 {
@@ -100,22 +117,8 @@ function ccm_test()
 
 			dcmd="$KCAPI -x $ciphertype $aligned $stream -c \"$AEAD_name\" -n \"$nonce\" -k \"$key\" -a \"$assoc\" -q \"$encrypted\" -t \"$tag_data\""
 			dec=$($KCAPI -x $ciphertype $aligned $stream -c "$AEAD_name" -n "$nonce" -k "$key" -a "$assoc" -q "$encrypted" -t "$tag_data" 2> /dev/null)
+			printdebug
 
-#For Debug
-echo -e "${debug}
-Keylen=$keylen
-Key=$key
-Nonce_size=$noncelen
-Nonce=$nonce
-Assoc_len=$assoclen
-Assoc=$assoc
-Taglen=$taglen
-Encrypted=$enc
-Tag_data=$tag_data
-Data_item=$data_item
-Decrypted=$dec
-ECMD=$ecmd
-DCMD=$dcmd${off}\n"
                         dmesg|grep -i "WR" > /dev/null
                         if [ $? == "0" ]
                         then
