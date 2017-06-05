@@ -41,8 +41,9 @@ assoc_8="3522558552215345589054024869445718308459930230810925924374337683"
 declare -a key_leng=("128" "192" "256")
 declare -a tag_leng=("8" "12" "16")
 declare -a assoc_leng=("1" "2" "3" "4" "5" "6" "7" "8")
-declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
-#readarray data_input < /root/crypto_scripts/all_test/plain_data.input
+
+#declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
+readarray data_input < $(pwd)/data_file.txt
 
 #Test Binary path
 KCAPI="/root/libkcapi-0.13.0/test/kcapi"
@@ -142,7 +143,6 @@ function rfc4106_test()
 			dcmd="$KCAPI -x $ciphertype $aligned $stream $splice -c \"$AEAD_name\" -i \"$iv\" -k \"$key\" -a \"$assoc\" -q \"$encrypted\" -t \"$tag_data\""
 			dec=$($KCAPI -x $ciphertype $aligned $stream $splice -c "$AEAD_name" -i "$iv" -k "$key" -a "$assoc" -q "$encrypted" -t "$tag_data" 2> /dev/null)
 
-			printdebug
 			check_fail "fail"
 			check_fail "WR"
 
@@ -171,8 +171,8 @@ function rfc4106_test()
 		done
 	}
 }
-gcm_test 2
-#gcm_test 10 -s &
-#gcm_test 10 -v &
-#gcm_test 2 -s &
-#gcm_test 2 -v &
+rfc4106_test 2
+rfc4106_test 10 -s &
+rfc4106_test 10 -v &
+rfc4106_test 2 -s &
+rfc4106_test 2 -v &

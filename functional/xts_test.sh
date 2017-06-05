@@ -22,8 +22,9 @@ key_256="45143780502c90cc11055ea65f1e016fb04c35b4d11b8c8d829843a310feda9d"
 key_512="f7e573d4da909e174bc7efe38b799a9c4b49691bda504fdd76d20b39e2ec48a74304a9aea126fea34a300c7abf0ecc3093443ffb6bf0188da021ccbf8e55e39c"
 
 declare -a key_leng=("256" "512")
-declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
-#readarray data_input < /root/crypto_scripts/all_test/plain_data.input
+
+#declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
+readarray data_input < $(pwd)/data_file.txt
 
 #Test Binary path
 KCAPI="/root/libkcapi-0.13.0/test/kcapi"

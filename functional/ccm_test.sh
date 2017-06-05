@@ -50,8 +50,9 @@ declare -a key_leng=("128" "192" "256")
 declare -a tag_leng=("4" "6" "8" "10" "12" "14" "16")
 declare -a assoc_leng=("1" "2" "3" "4" "5" "6" "7" "8")
 declare -a nonce_leng=("14" "16" "18" "20" "22" "24" "26")
-declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
-#readarray data_input < /root/crypto_scripts/all_test/plain_data.input
+
+#declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
+readarray data_input < $(pwd)/data_file.txt
 
 #Test Binary path
 KCAPI="/root/libkcapi-0.13.0/test/kcapi"
