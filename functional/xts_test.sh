@@ -76,6 +76,11 @@ function xts_test()
 	splice=$4
 	AEAD_name="xts(aes)"
 
+        data_file=$(tr -c -d "0-9a-z" < /dev/urandom | head -c 5)
+        decr_file=$(tr -c -d "0-9a-z" < /dev/urandom | head -c 5)
+        touch /tmp/$data_file.txt
+        touch /tmp/$decr_file.txt
+
 	iv_size=$(( RANDOM % 100 ))
 	if [ $iv_size != 0 ]
 	then
@@ -113,15 +118,19 @@ function xts_test()
 			then
 			{
 				echo -e "${error}\nTool failed.${off}\n"
-				echo -e "${heading}ECMD:${debug}$ecmd\n${heading}DCMD:${debug}$dcmd\n${heading}Encrypted:${debug}$enc\n${heading}Decrypted:${debug}$dec\n${heading}Expected:${debug}$data_item${off}"
+				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_xts.log
 				exit 1
 			}
 			fi
-                        if [ $data_item != $dec ]
+                        echo -n "$data_item" > /tmp/$data_file.txt
+                        echo -n "$dec" > /tmp/$decr_file.txt
+                        diff /tmp/$data_file.txt /tmp/$decr_file.txt > /dev/null
+                        if [ $? -ne 0 ]
                         then
                         {
                                 echo -e "${error}Test failed.${off}"
-				echo -e "${debug}ECMD:$ecmd\nDCMD:$dcmd\nEncrypted:$enc\nDecrypted:$dec\nExpected:$data_item${off}"
+				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_xts.log
+                                echo -e "${debug}Data and decrypted data files : /tmp/$data_file.txt,/tmp/$decr_file.txt${off}"
                                 exit 1
                         }
                         fi

@@ -18,13 +18,17 @@ pass='\033[0;32m'
 heading='\033[1;33m'
 debug='\033[0;36m'
 
+RED="\x1B[31m"
+GREEN="\x1B[01;92m"
+end="\x1B[0m"
+
 key_128="44dd26da9d1f108a3c2680bae28f83e0" 
 key_192="9040b222c258c48f9e5ab577233c149ceb5d6283ea3a6fc6"
 key_256="45143780502c90cc11055ea65f1e016fb04c35b4d11b8c8d829843a310feda9d"
 
 declare -a key_leng=("128" "192" "256")
-declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
-#readarray data_input < /root/crypto_scripts/all_test/plain_data.input
+#declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
+readarray data_input < $(pwd)/data_file.txt
 
 #Test Binary path
 KCAPI="/root/libkcapi-0.13.0/test/kcapi"
@@ -77,6 +81,12 @@ function cbc_test()
 	splice=$4
 	AEAD_name="cbc(aes)"
 
+
+        data_file=$(tr -c -d "0-9a-z" < /dev/urandom | head -c 5)
+        decr_file=$(tr -c -d "0-9a-z" < /dev/urandom | head -c 5)
+        touch /tmp/$data_file.txt
+        touch /tmp/$decr_file.txt
+
 	iv_size=$(( RANDOM % 100 ))
 	if [ $iv_size != 0 ]
 	then
@@ -114,15 +124,19 @@ function cbc_test()
 			then
 			{
 				echo -e "${error}\nTool failed.${off}\n"
-				echo -e "${heading}ECMD:${debug}$ecmd\n${heading}DCMD:${debug}$dcmd\n${heading}Encrypted:${debug}$enc\n${heading}Decrypted:${debug}$dec\n${heading}Expected:${debug}$data_item${off}"
+				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_cbc.log
 				exit 1
 			}
 			fi
-                        if [ $data_item != $dec ]
+                        echo -n "$data_item" > /tmp/$data_file.txt
+                        echo -n "$dec" > /tmp/$decr_file.txt
+                        diff /tmp/$data_file.txt /tmp/$decr_file.txt > /dev/null
+                        if [ $? -ne 0 ]
                         then
                         {
-                                echo -e "${error}Test failed.${off}"
-				echo -e "${debug}ECMD:$ecmd\nDCMD:$dcmd\nEncrypted:$enc\nDecrypted:$dec\nExpected:$data_item${off}"
+                                echo -e "${RED}Test failed.${end}"
+				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_cbc.log
+				echo -e "${debug}Data and decrypted data files : /tmp/$data_file.txt,/tmp/$decr_file.txt${off}"
                                 exit 1
                         }
                         fi
