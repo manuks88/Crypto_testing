@@ -1,5 +1,5 @@
 #!/bin/bash
-#CBC supports 128,192 & 256 bit keys.
+#CTR supports 128,192 & 256 bit keys.
 #Easiest cipher, take data and encrypt using key, decrypt using the encypted text.
 #IV can be null.
 
@@ -73,13 +73,13 @@ function check_fail()
         fi
 }
 
-function cbc_test()
+function ctr_test()
 {
 	ciphertype=$1
 	aligned=$2
 	stream=$3
 	splice=$4
-	AEAD_name="cbc(aes)"
+	AEAD_name="ctr(aes)"
 
 
         data_file=$(tr -c -d "0-9a-z" < /dev/urandom | head -c 5)
@@ -124,7 +124,7 @@ function cbc_test()
 			then
 			{
 				echo -e "${error}\nTool failed.${off}\n"
-				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_cbc.log
+				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_ctr.log
 				exit 1
 			}
 			fi
@@ -135,7 +135,7 @@ function cbc_test()
                         then
                         {
                                 echo -e "${RED}Test failed.${end}"
-				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_cbc.log
+				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_ctr.log
 				echo -e "${debug}Data and decrypted data files : /tmp/$data_file.txt,/tmp/$decr_file.txt${off}"
                                 exit 1
                         }
@@ -145,36 +145,26 @@ function cbc_test()
 		done
 	}
 }
-echo -e "${GREEN}[Symmetric cipher]${end}"
-cbc_test 1
-echo -e "${GREEN}[Symmetric Stream cipher]${end}"
-cbc_test 1 -s
-echo -e "${GREEN}[Symmetric Splice cipher]${end}"
-cbc_test 1 -v
-echo -e "${GREEN}[Symmetric Stream-Splice cipher]${end}"
-cbc_test 1 -s -v
-echo -e "${GREEN}[Symmetric Aligned cipher]${end}"
-cbc_test 1 -m 
-echo -e "${GREEN}[Symmetric Aligned Stream cipher]${end}"
-cbc_test 1 -m -s
-echo -e "${GREEN}[Symmetric Aligned Splice cipher]${end}"
-cbc_test 1 -m -v
-echo -e "${GREEN}[Symmetric Aligned Stream-Splice cipher]${end}"
-cbc_test 1 -m -s -v
+ctr_test 1
+ctr_test 1 -s
+ctr_test 1 -v
+ctr_test 1 -s -v
+ctr_test 1 -m
+ctr_test 1 -m -s
+ctr_test 1 -m -v
+ctr_test 1 -m -s -v
 
-echo -e "${GREEN}[AIO Symmetric cipher]${end}"
-cbc_test 9
-echo -e "${GREEN}[AIO Symmetric Stream cipher]${end}"
-cbc_test 9 -s
-echo -e "${GREEN}[AIO Symmetric Splice cipher]${end}"
-cbc_test 9 -v
-echo -e "${GREEN}[AIO Symmetric Stream-Splice cipher]${end}"
-cbc_test 9 -s -v
-echo -e "${GREEN}[AIO Symmetric Aligned cipher]${end}"
-cbc_test 9 -m 
-echo -e "${GREEN}[AIO Symmetric Aligned Stream cipher]${end}"
-cbc_test 9 -m -s
-echo -e "${GREEN}[AIO Symmetric Aligned Splice cipher]${end}"
-cbc_test 9 -m -v
-echo -e "${GREEN}[AIO Symmetric Aligned Stream-Splice cipher]${end}"
-cbc_test 9 -m -s -v
+ctr_test 9
+ctr_test 9 -s
+ctr_test 9 -v
+ctr_test 9 -s -v
+ctr_test 9 -m
+ctr_test 9 -m -s
+ctr_test 9 -m -v
+ctr_test 9 -m -s -v
+#ctr_test 9 -s 
+#ctr_test 9 -v 
+#ctr_test 1 -s 
+#ctr_test 1 -v
+#ctr_test 1 "" -v -s 
+#ctr_test 9 -m -v -s 

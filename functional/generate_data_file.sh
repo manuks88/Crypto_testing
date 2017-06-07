@@ -1,12 +1,12 @@
 #!/bin/bash
 rm -rf $(pwd)/data_file.txt
-for i in {1..60}
+for i in {1..10}
 {
-        size=$(( RANDOM % 1250))
+        size=$(( RANDOM % 512))
         if [ $size == "0" ]
         then
         {
-                size="1250"
+                size="512"
         }
 	fi
 	for (( j=1;j<=$size;j++ ))
@@ -17,5 +17,5 @@ for i in {1..60}
 	        echo -n '$!' >> $(pwd)/data_file.txt
 	}
         printf "\n" >> $(pwd)/data_file.txt
-        echo $i
+#        echo $i
 }

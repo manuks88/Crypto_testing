@@ -165,12 +165,26 @@ function ccm_test()
                                 exit 1
                         }
                         fi
+			rm -rf /tmp/$data_file.txt /tmp/$decr_file.txt
 		}
 		done
 	}
 }
+
 ccm_test 2
-#ccm_test 10 -s &
-#ccm_test 10 -v &
-#ccm_test 2 -s &
-#ccm_test 2 -v &
+ccm_test 2 -s
+ccm_test 2 -v
+ccm_test 2 -s -v
+ccm_test 2 -m
+ccm_test 2 -m -s
+ccm_test 2 -m -v
+ccm_test 2 -m -s -v
+
+ccm_test 10
+ccm_test 10 -s
+ccm_test 10 -v
+ccm_test 10 -s -v
+ccm_test 10 -m
+ccm_test 10 -m -s
+ccm_test 10 -m -v
+ccm_test 10 -m -s -v

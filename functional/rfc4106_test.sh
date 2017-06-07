@@ -30,17 +30,12 @@ key_192="b815e4d98e7e91d476152c44596b02ab1f75319a15d8a6c260eafe45"
 key_256="3d2a91b4607477217ce9816f8e2b4b0201c4a6900a712631250c5f4690198e2fdcf04073"
 
 assoc_1=""
-assoc_2="32578"
-assoc_3="9926955637"
-assoc_4="036652369429784"
-assoc_5="046553862931100730565"
-assoc_6="67977111399186363719828586853974"
-assoc_7="944784330463044581168718752647326343924198440285"
-assoc_8="3522558552215345589054024869445718308459930230810925924374337683"
+assoc_2="0dbe914e"
+assoc_32="230f403d65a965854b2490846074e43f"
+assoc_40="7c19625d8ae5e250ddfd606784b9d72474c99b71"
 
 declare -a key_leng=("128" "192" "256")
 declare -a tag_leng=("8" "12" "16")
-declare -a assoc_leng=("1" "2" "3" "4" "5" "6" "7" "8")
 
 #declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
 readarray data_input < $(pwd)/data_file.txt
@@ -107,7 +102,7 @@ function rfc4106_test()
         touch /tmp/$data_file.txt
         touch /tmp/$decr_file.txt
 
-	iv_size=$((( RANDOM % 100 )+ 1))
+	iv_size=$((( RANDOM % 20 )+ 1))
 	if [ $iv_size == 1 ]
 	then
 	{
@@ -115,6 +110,18 @@ function rfc4106_test()
 	}
 	fi
 	iv=$(tr -c -d "0-9a-f" < /dev/urandom | head -c $iv_size)
+	if [ "$iv_size" -gt "17" ]
+	then
+	{
+		assoc_size=$((40 - iv_size))
+		assoc_data=$(tr -c -d "0-9a-f" < /dev/urandom | head -c $assoc_size)
+	}
+	else
+	{
+		assoc_size=$((32 - iv_size))
+                assoc_data=$(tr -c -d "0-9a-f" < /dev/urandom | head -c $assoc_size)
+	}
+	fi
 
 	for (( iter=1;iter<$user_input;iter++ ))
 	{
@@ -123,8 +130,6 @@ function rfc4106_test()
 		{
 			keylen=${key_leng["$[RANDOM % ${#key_leng[@]}]"]}
 			eval key=\$key_$keylen
-			assoclen=${assoc_leng["$[RANDOM % ${#assoc_leng[@]}]"]}
-			eval assoc_data=\$assoc_$assoclen
 			assoc=${assoc_data}${iv}
 			data_leng=$(echo -n $data_item | wc -m)
 			taglen=${tag_leng["$[RANDOM % ${#tag_leng[@]}]"]}
@@ -150,6 +155,7 @@ function rfc4106_test()
 			if [ $? == "0" ]
 			then
 			{
+				printdebug
 				echo -e "${error}\nTool failed.${off}\n"
 				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_rfc4106.log
 				exit 1
@@ -167,12 +173,25 @@ function rfc4106_test()
                                 exit 1
                         }
                         fi
+			rm -rf /tmp/$data_file.txt /tmp/$decr_file.txt
 		}
 		done
 	}
 }
 rfc4106_test 2
-rfc4106_test 10 -s &
-rfc4106_test 10 -v &
-rfc4106_test 2 -s &
-rfc4106_test 2 -v &
+rfc4106_test 2 -s
+rfc4106_test 2 -v
+rfc4106_test 2 -s -v
+rfc4106_test 2 -m
+rfc4106_test 2 -m -s
+rfc4106_test 2 -m -v
+rfc4106_test 2 -m -s -v
+
+rfc4106_test 10
+rfc4106_test 10 -s
+rfc4106_test 10 -v
+rfc4106_test 10 -s -v
+rfc4106_test 10 -m
+rfc4106_test 10 -m -s
+rfc4106_test 10 -m -v
+rfc4106_test 10 -m -s -v

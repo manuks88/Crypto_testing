@@ -8,6 +8,8 @@
 #During decryption we take the delta of output after removing tag_data and use this tag_data to get original
 #text.
 
+#Use size < 1024 in file generator
+
 if [ $# -ne 1 ]
 then
 {
@@ -164,12 +166,25 @@ function gcm_test()
                                 exit 1
                         }
                         fi
+			rm -rf /tmp/$data_file.txt /tmp/$decr_file.txt
 		}
 		done
 	}
 }
 gcm_test 2
-#gcm_test 10 -s &
-#gcm_test 10 -v &
-#gcm_test 2 -s &
-#gcm_test 2 -v &
+gcm_test 2 -s
+gcm_test 2 -v
+gcm_test 2 -s -v
+gcm_test 2 -m
+gcm_test 2 -m -s
+gcm_test 2 -m -v
+gcm_test 2 -m -s -v
+
+gcm_test 10
+gcm_test 10 -s
+gcm_test 10 -v
+gcm_test 10 -s -v
+gcm_test 10 -m
+gcm_test 10 -m -s
+gcm_test 10 -m -v
+gcm_test 10 -m -s -v

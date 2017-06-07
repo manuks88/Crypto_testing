@@ -1,5 +1,5 @@
 #!/bin/bash
-#CBC supports 128,192 & 256 bit keys.
+#CTR supports 128,192 & 256 bit keys. RFC3686 requires 4 more bytes in key.
 #Easiest cipher, take data and encrypt using key, decrypt using the encypted text.
 #IV can be null.
 
@@ -22,9 +22,9 @@ RED="\x1B[31m"
 GREEN="\x1B[01;92m"
 end="\x1B[0m"
 
-key_128="44dd26da9d1f108a3c2680bae28f83e0" 
-key_192="9040b222c258c48f9e5ab577233c149ceb5d6283ea3a6fc6"
-key_256="45143780502c90cc11055ea65f1e016fb04c35b4d11b8c8d829843a310feda9d"
+key_128="0da155bd94bfb4517c1e74e35235968d60124dcc"
+key_192="0f798c9ae7c091a40678c63ff2e22061ee9611d9b7798e33e727f716"
+key_256="2c3e11e8d4ce8f1afbe1cbba4a31c664cf58d001b15498941b2541d77592fb03e7b6d6a2"
 
 declare -a key_leng=("128" "192" "256")
 #declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
@@ -73,13 +73,13 @@ function check_fail()
         fi
 }
 
-function cbc_test()
+function rfc3686_test()
 {
 	ciphertype=$1
 	aligned=$2
 	stream=$3
 	splice=$4
-	AEAD_name="cbc(aes)"
+	AEAD_name="rfc3686(ctr(aes))"
 
 
         data_file=$(tr -c -d "0-9a-z" < /dev/urandom | head -c 5)
@@ -124,7 +124,7 @@ function cbc_test()
 			then
 			{
 				echo -e "${error}\nTool failed.${off}\n"
-				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_cbc.log
+				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_rfc3686.log
 				exit 1
 			}
 			fi
@@ -135,7 +135,7 @@ function cbc_test()
                         then
                         {
                                 echo -e "${RED}Test failed.${end}"
-				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_cbc.log
+				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_rfc3686.log
 				echo -e "${debug}Data and decrypted data files : /tmp/$data_file.txt,/tmp/$decr_file.txt${off}"
                                 exit 1
                         }
@@ -145,36 +145,20 @@ function cbc_test()
 		done
 	}
 }
-echo -e "${GREEN}[Symmetric cipher]${end}"
-cbc_test 1
-echo -e "${GREEN}[Symmetric Stream cipher]${end}"
-cbc_test 1 -s
-echo -e "${GREEN}[Symmetric Splice cipher]${end}"
-cbc_test 1 -v
-echo -e "${GREEN}[Symmetric Stream-Splice cipher]${end}"
-cbc_test 1 -s -v
-echo -e "${GREEN}[Symmetric Aligned cipher]${end}"
-cbc_test 1 -m 
-echo -e "${GREEN}[Symmetric Aligned Stream cipher]${end}"
-cbc_test 1 -m -s
-echo -e "${GREEN}[Symmetric Aligned Splice cipher]${end}"
-cbc_test 1 -m -v
-echo -e "${GREEN}[Symmetric Aligned Stream-Splice cipher]${end}"
-cbc_test 1 -m -s -v
-
-echo -e "${GREEN}[AIO Symmetric cipher]${end}"
-cbc_test 9
-echo -e "${GREEN}[AIO Symmetric Stream cipher]${end}"
-cbc_test 9 -s
-echo -e "${GREEN}[AIO Symmetric Splice cipher]${end}"
-cbc_test 9 -v
-echo -e "${GREEN}[AIO Symmetric Stream-Splice cipher]${end}"
-cbc_test 9 -s -v
-echo -e "${GREEN}[AIO Symmetric Aligned cipher]${end}"
-cbc_test 9 -m 
-echo -e "${GREEN}[AIO Symmetric Aligned Stream cipher]${end}"
-cbc_test 9 -m -s
-echo -e "${GREEN}[AIO Symmetric Aligned Splice cipher]${end}"
-cbc_test 9 -m -v
-echo -e "${GREEN}[AIO Symmetric Aligned Stream-Splice cipher]${end}"
-cbc_test 9 -m -s -v
+rfc3686_test 1
+rfc3686_test 1 -s
+rfc3686_test 1 -v
+rfc3686_test 1 -s -v
+rfc3686_test 1 -m
+rfc3686_test 1 -m -s
+rfc3686_test 1 -m -v
+rfc3686_test 1 -m -s -v
+#
+rfc3686_test 9
+rfc3686_test 9 -s
+rfc3686_test 9 -v
+rfc3686_test 9 -s -v
+rfc3686_test 9 -m
+rfc3686_test 9 -m -s
+rfc3686_test 9 -m -v
+rfc3686_test 9 -m -s -v

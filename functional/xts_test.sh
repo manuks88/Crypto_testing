@@ -22,7 +22,6 @@ key_256="45143780502c90cc11055ea65f1e016fb04c35b4d11b8c8d829843a310feda9d"
 key_512="f7e573d4da909e174bc7efe38b799a9c4b49691bda504fdd76d20b39e2ec48a74304a9aea126fea34a300c7abf0ecc3093443ffb6bf0188da021ccbf8e55e39c"
 
 declare -a key_leng=("256" "512")
-
 #declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
 readarray data_input < $(pwd)/data_file.txt
 
@@ -135,14 +134,26 @@ function xts_test()
                                 exit 1
                         }
                         fi
+			rm -rf /tmp/$data_file.txt /tmp/$decr_file.txt
 		}
 		done
 	}
 }
+
 xts_test 1
-#xts_test 9 -s 
-#xts_test 9 -v 
-#xts_test 1 -s 
-#xts_test 1 -v
-#xts_test 1 "" -v -s 
-#xts_test 9 -m -v -s 
+xts_test 1 -s
+xts_test 1 -v
+xts_test 1 -s -v
+xts_test 1 -m
+xts_test 1 -m -s
+xts_test 1 -m -v
+xts_test 1 -m -s -v
+
+xts_test 9
+xts_test 9 -s
+xts_test 9 -v
+xts_test 9 -s -v
+xts_test 9 -m
+xts_test 9 -m -s
+xts_test 9 -m -v
+xts_test 9 -m -s -v
