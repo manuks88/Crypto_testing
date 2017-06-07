@@ -145,26 +145,64 @@ function ctr_test()
 		done
 	}
 }
-ctr_test 1
-ctr_test 1 -s
-ctr_test 1 -v
-ctr_test 1 -s -v
-ctr_test 1 -m
-ctr_test 1 -m -s
-ctr_test 1 -m -v
-ctr_test 1 -m -s -v
 
-ctr_test 9
-ctr_test 9 -s
-ctr_test 9 -v
-ctr_test 9 -s -v
-ctr_test 9 -m
-ctr_test 9 -m -s
-ctr_test 9 -m -v
-ctr_test 9 -m -s -v
-#ctr_test 9 -s 
-#ctr_test 9 -v 
-#ctr_test 1 -s 
-#ctr_test 1 -v
-#ctr_test 1 "" -v -s 
-#ctr_test 9 -m -v -s 
+declare -a options=("-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
+
+for ciphertype in 1 9
+{
+        for option in "${options[@]}"
+        {
+                if [[ $option == "-s" ]]
+                then
+                {
+                        Test="Stream"
+                }
+                elif [[ $option == "-v" ]]
+                then
+                {
+                        Test="Splice"
+                }
+                elif [[ $option == "-s -v" ]]
+                then
+                {
+                        Test="Stream-Splice"
+                }
+                elif [[ $option == "-m" ]]
+                then
+                {
+                        Test="Aligned"
+                }
+                elif [[ $option == "-m -s" ]]
+                then
+                {
+                        Test="Aligned Stream"
+                }
+                elif [[ $option == "-m -v" ]]
+                then
+                {
+                        Test="Aligned Splice"
+                }
+                elif [[ $option == "-m -s -v" ]]
+                then
+                {
+                        Test="Aligned Stream-Splice"
+                }
+                fi
+
+                if [[ "$ciphertype" == "1" ]]
+                then
+                {
+                        type_test="Symmetric"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        ctr_test $ciphertype $option
+                }
+                else
+                {
+                        type_test="AIO Symmetric"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        ctr_test $ciphertype $option
+                }
+                fi
+        }
+}
+

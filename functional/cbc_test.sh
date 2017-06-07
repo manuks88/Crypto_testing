@@ -145,36 +145,64 @@ function cbc_test()
 		done
 	}
 }
-echo -e "${GREEN}[Symmetric cipher]${end}"
-cbc_test 1
-echo -e "${GREEN}[Symmetric Stream cipher]${end}"
-cbc_test 1 -s
-echo -e "${GREEN}[Symmetric Splice cipher]${end}"
-cbc_test 1 -v
-echo -e "${GREEN}[Symmetric Stream-Splice cipher]${end}"
-cbc_test 1 -s -v
-echo -e "${GREEN}[Symmetric Aligned cipher]${end}"
-cbc_test 1 -m 
-echo -e "${GREEN}[Symmetric Aligned Stream cipher]${end}"
-cbc_test 1 -m -s
-echo -e "${GREEN}[Symmetric Aligned Splice cipher]${end}"
-cbc_test 1 -m -v
-echo -e "${GREEN}[Symmetric Aligned Stream-Splice cipher]${end}"
-cbc_test 1 -m -s -v
 
-echo -e "${GREEN}[AIO Symmetric cipher]${end}"
-cbc_test 9
-echo -e "${GREEN}[AIO Symmetric Stream cipher]${end}"
-cbc_test 9 -s
-echo -e "${GREEN}[AIO Symmetric Splice cipher]${end}"
-cbc_test 9 -v
-echo -e "${GREEN}[AIO Symmetric Stream-Splice cipher]${end}"
-cbc_test 9 -s -v
-echo -e "${GREEN}[AIO Symmetric Aligned cipher]${end}"
-cbc_test 9 -m 
-echo -e "${GREEN}[AIO Symmetric Aligned Stream cipher]${end}"
-cbc_test 9 -m -s
-echo -e "${GREEN}[AIO Symmetric Aligned Splice cipher]${end}"
-cbc_test 9 -m -v
-echo -e "${GREEN}[AIO Symmetric Aligned Stream-Splice cipher]${end}"
-cbc_test 9 -m -s -v
+declare -a options=("-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
+
+for ciphertype in 1 9
+{
+        for option in "${options[@]}"
+        {
+                if [[ $option == "-s" ]]
+                then
+                {
+                        Test="Stream"
+                }
+                elif [[ $option == "-v" ]]
+                then
+                {
+                        Test="Splice"
+                }
+                elif [[ $option == "-s -v" ]]
+                then
+                {
+                        Test="Stream-Splice"
+                }
+                elif [[ $option == "-m" ]]
+                then
+                {
+                        Test="Aligned"
+                }
+                elif [[ $option == "-m -s" ]]
+                then
+                {
+                        Test="Aligned Stream"
+                }
+                elif [[ $option == "-m -v" ]]
+                then
+                {
+                        Test="Aligned Splice"
+                }
+                elif [[ $option == "-m -s -v" ]]
+                then
+                {
+                        Test="Aligned Stream-Splice"
+                }
+                fi
+
+                if [[ "$ciphertype" == "1" ]]
+                then
+                {
+                        type_test="Symmetric"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        cbc_test $ciphertype $option
+                }
+                else
+                {
+                        type_test="AIO Symmetric"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        cbc_test $ciphertype $option
+                }
+                fi
+        }
+}
+

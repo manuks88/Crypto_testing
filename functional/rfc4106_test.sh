@@ -24,6 +24,10 @@ pass='\033[0;32m'
 heading='\033[1;33m'
 debug='\033[0;36m'
 
+RED="\x1B[31m"
+GREEN="\x1B[01;92m"
+end="\x1B[0m"
+
 #Key + SALT, so length is more.
 key_128="0d619d0527b491484d1bfecf029be1c24226fb1a"
 key_192="b815e4d98e7e91d476152c44596b02ab1f75319a15d8a6c260eafe45"
@@ -178,20 +182,63 @@ function rfc4106_test()
 		done
 	}
 }
-rfc4106_test 2
-rfc4106_test 2 -s
-rfc4106_test 2 -v
-rfc4106_test 2 -s -v
-rfc4106_test 2 -m
-rfc4106_test 2 -m -s
-rfc4106_test 2 -m -v
-rfc4106_test 2 -m -s -v
 
-rfc4106_test 10
-rfc4106_test 10 -s
-rfc4106_test 10 -v
-rfc4106_test 10 -s -v
-rfc4106_test 10 -m
-rfc4106_test 10 -m -s
-rfc4106_test 10 -m -v
-rfc4106_test 10 -m -s -v
+declare -a options=("-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
+
+for ciphertype in 2 10
+{
+	for option in "${options[@]}"
+	{
+		if [[ $option == "-s" ]]
+		then
+		{
+			Test="Stream"
+		}
+		elif [[ $option == "-v" ]]
+		then
+		{
+			Test="Splice"
+		}
+		elif [[ $option == "-s -v" ]]
+		then
+		{
+			Test="Stream-Splice"
+		}
+		elif [[ $option == "-m" ]]
+		then
+		{
+			Test="Aligned"
+		}
+		elif [[ $option == "-m -s" ]]
+		then
+		{
+			Test="Aligned Stream"
+		}
+		elif [[ $option == "-m -v" ]]
+		then
+		{
+			Test="Aligned Splice"
+		}
+		elif [[ $option == "-m -s -v" ]]
+		then
+		{
+			Test="Aligned Stream-Splice"
+		}
+		fi
+	
+	        if [[ "$ciphertype" == "2" ]]
+	        then
+	        {
+	                type_test="AEAD"
+	                echo -e "${GREEN}$type_test $Test${end}"
+	                rfc4106_test $ciphertype $option
+	        }
+	        else
+	        {
+	                type_test="AIO AEAD"
+	                echo -e "${GREEN}$type_test $Test${end}"
+	                rfc4106_test $ciphertype $option
+	        }
+	        fi
+	}
+}

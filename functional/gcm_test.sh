@@ -25,6 +25,10 @@ pass='\033[0;32m'
 heading='\033[1;33m'
 debug='\033[0;36m'
 
+RED="\x1B[31m"
+GREEN="\x1B[01;92m"
+end="\x1B[0m"
+
 key_128="44dd26da9d1f108a3c2680bae28f83e0" #128 bit
 key_192="9040b222c258c48f9e5ab577233c149ceb5d6283ea3a6fc6" #192 bit
 key_256="45143780502c90cc11055ea65f1e016fb04c35b4d11b8c8d829843a310feda9d" #256 bit
@@ -171,20 +175,63 @@ function gcm_test()
 		done
 	}
 }
-gcm_test 2
-gcm_test 2 -s
-gcm_test 2 -v
-gcm_test 2 -s -v
-gcm_test 2 -m
-gcm_test 2 -m -s
-gcm_test 2 -m -v
-gcm_test 2 -m -s -v
 
-gcm_test 10
-gcm_test 10 -s
-gcm_test 10 -v
-gcm_test 10 -s -v
-gcm_test 10 -m
-gcm_test 10 -m -s
-gcm_test 10 -m -v
-gcm_test 10 -m -s -v
+declare -a options=("-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
+
+for ciphertype in 2 10
+{
+        for option in "${options[@]}"
+        {
+                if [[ $option == "-s" ]]
+                then
+                {
+                        Test="Stream"
+                }
+                elif [[ $option == "-v" ]]
+                then
+                {
+                        Test="Splice"
+                }
+                elif [[ $option == "-s -v" ]]
+                then
+                {
+                        Test="Stream-Splice"
+                }
+                elif [[ $option == "-m" ]]
+                then
+                {
+                        Test="Aligned"
+                }
+                elif [[ $option == "-m -s" ]]
+                then
+                {
+                        Test="Aligned Stream"
+                }
+                elif [[ $option == "-m -v" ]]
+                then
+                {
+                        Test="Aligned Splice"
+                }
+                elif [[ $option == "-m -s -v" ]]
+                then
+                {
+                        Test="Aligned Stream-Splice"
+                }
+                fi
+
+                if [[ "$ciphertype" == "2" ]]
+                then
+                {
+                        type_test="AEAD"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        gcm_test $ciphertype $option
+                }
+                else
+                {
+                        type_test="AIO AEAD"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        gcm_test $ciphertype $option
+                }
+                fi
+        }
+}

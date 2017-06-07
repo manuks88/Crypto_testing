@@ -18,6 +18,10 @@ pass='\033[0;32m'
 heading='\033[1;33m'
 debug='\033[0;36m'
 
+RED="\x1B[31m"
+GREEN="\x1B[01;92m"
+end="\x1B[0m"
+
 key_256="45143780502c90cc11055ea65f1e016fb04c35b4d11b8c8d829843a310feda9d"
 key_512="f7e573d4da909e174bc7efe38b799a9c4b49691bda504fdd76d20b39e2ec48a74304a9aea126fea34a300c7abf0ecc3093443ffb6bf0188da021ccbf8e55e39c"
 
@@ -140,20 +144,63 @@ function xts_test()
 	}
 }
 
-xts_test 1
-xts_test 1 -s
-xts_test 1 -v
-xts_test 1 -s -v
-xts_test 1 -m
-xts_test 1 -m -s
-xts_test 1 -m -v
-xts_test 1 -m -s -v
+declare -a options=("-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
 
-xts_test 9
-xts_test 9 -s
-xts_test 9 -v
-xts_test 9 -s -v
-xts_test 9 -m
-xts_test 9 -m -s
-xts_test 9 -m -v
-xts_test 9 -m -s -v
+for ciphertype in 1 9
+{
+        for option in "${options[@]}"
+        {
+                if [[ $option == "-s" ]]
+                then
+                {
+                        Test="Stream"
+                }
+                elif [[ $option == "-v" ]]
+                then
+                {
+                        Test="Splice"
+                }
+                elif [[ $option == "-s -v" ]]
+                then
+                {
+                        Test="Stream-Splice"
+                }
+                elif [[ $option == "-m" ]]
+                then
+                {
+                        Test="Aligned"
+                }
+                elif [[ $option == "-m -s" ]]
+                then
+                {
+                        Test="Aligned Stream"
+                }
+                elif [[ $option == "-m -v" ]]
+                then
+                {
+                        Test="Aligned Splice"
+                }
+                elif [[ $option == "-m -s -v" ]]
+                then
+                {
+                        Test="Aligned Stream-Splice"
+                }
+                fi
+
+                if [[ "$ciphertype" == "1" ]]
+                then
+                {
+                        type_test="Symmetric"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        xts_test $ciphertype $option
+                }
+                else
+                {
+                        type_test="AIO Symmetric"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        xts_test $ciphertype $option
+                }
+                fi
+        }
+}
+

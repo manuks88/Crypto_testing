@@ -145,20 +145,63 @@ function rfc3686_test()
 		done
 	}
 }
-rfc3686_test 1
-rfc3686_test 1 -s
-rfc3686_test 1 -v
-rfc3686_test 1 -s -v
-rfc3686_test 1 -m
-rfc3686_test 1 -m -s
-rfc3686_test 1 -m -v
-rfc3686_test 1 -m -s -v
-#
-rfc3686_test 9
-rfc3686_test 9 -s
-rfc3686_test 9 -v
-rfc3686_test 9 -s -v
-rfc3686_test 9 -m
-rfc3686_test 9 -m -s
-rfc3686_test 9 -m -v
-rfc3686_test 9 -m -s -v
+
+declare -a options=("-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
+
+for ciphertype in 1 9
+{
+        for option in "${options[@]}"
+        {
+                if [[ $option == "-s" ]]
+                then
+                {
+                        Test="Stream"
+                }
+                elif [[ $option == "-v" ]]
+                then
+                {
+                        Test="Splice"
+                }
+                elif [[ $option == "-s -v" ]]
+                then
+                {
+                        Test="Stream-Splice"
+                }
+                elif [[ $option == "-m" ]]
+                then
+                {
+                        Test="Aligned"
+                }
+                elif [[ $option == "-m -s" ]]
+                then
+                {
+                        Test="Aligned Stream"
+                }
+                elif [[ $option == "-m -v" ]]
+                then
+                {
+                        Test="Aligned Splice"
+                }
+                elif [[ $option == "-m -s -v" ]]
+                then
+                {
+                        Test="Aligned Stream-Splice"
+                }
+                fi
+
+                if [[ "$ciphertype" == "1" ]]
+                then
+                {
+                        type_test="Symmetric"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        rfc3686_test $ciphertype $option
+                }
+                else
+                {
+                        type_test="AIO Symmetric"
+                        echo -e "${GREEN}$type_test $Test${end}"
+                        rfc3686_test $ciphertype $option
+                }
+                fi
+        }
+}
