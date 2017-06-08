@@ -1,12 +1,12 @@
 #!/bin/bash
 rm -rf $(pwd)/data_file.txt
-for i in {1..10}
+for i in {1..60}
 {
-        size=$(( RANDOM % 512))
+        size=$(( RANDOM % 576))
         if [ $size == "0" ]
         then
         {
-                size="512"
+                size="576"
         }
 	fi
 	for (( j=1;j<=$size;j++ ))

@@ -159,7 +159,6 @@ function rfc4106_test()
 			if [ $? == "0" ]
 			then
 			{
-				printdebug
 				echo -e "${error}\nTool failed.${off}\n"
 				echo -e "ECMD:$ecmd\nDCMD:$dcmd\nENCRYPTED:$enc\nDECRYPTED:$dec\nEXPECTED:$data_item" > fail_rfc4106.log
 				exit 1
@@ -183,7 +182,7 @@ function rfc4106_test()
 	}
 }
 
-declare -a options=("-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
+declare -a options=("" "-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
 
 for ciphertype in 2 10
 {

@@ -175,7 +175,7 @@ function ccm_test()
 	}
 }
 
-declare -a options=("-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
+declare -a options=("" "-s" "-v" "-s -v" "-m" "-m -s" "-m -v" "-m -s -v")
 
 for ciphertype in 2 10
 {
