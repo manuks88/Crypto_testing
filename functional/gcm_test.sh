@@ -217,6 +217,11 @@ for ciphertype in 2 10
                 {
                         Test="Aligned Stream-Splice"
                 }
+                elif [[ -z $option ]]
+                then
+                {
+                        Test=""
+                }
                 fi
 
                 if [[ "$ciphertype" == "2" ]]
