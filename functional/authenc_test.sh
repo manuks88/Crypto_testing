@@ -110,7 +110,7 @@ function authenc_test()
 	}	
 	fi
 
-	for (( iter=1;iter<$user_input;iter++ ))
+	for (( iter=0;iter<$user_input;iter++ ))
 	{
 		for data_item in "${plain_data[@]}"
 		do
@@ -189,8 +189,8 @@ function authenc_test()
                         tag_del_count=$((encrypt_len - tag_del))
                         tag_data=$(echo -n "$enc" | cut -c $tag_del_count-)			
 
-			dcmd="$KCAPI -x $ciphertype $aligned $stream $splice -c \"$AEAD_name\" -i \"$iv\" -k \"$key\" -a \"$assoc\" -q \"$encrypted\" "
-			dec=$($KCAPI -x $ciphertype $aligned $stream $splice -c "$AEAD_name" -i "$iv" -k "$key" -a "$assoc" -q "$encrypted" 2> /dev/null)
+			dcmd="$KCAPI -x $ciphertype $aligned $stream $splice -c \"$AEAD_name\" -i \"$iv\" -k \"$key\" -a \"$assoc\" -q \"$encrypted\" -t \"$tag_data\""
+			dec=$($KCAPI -x $ciphertype $aligned $stream $splice -c "$AEAD_name" -i "$iv" -k "$key" -a "$assoc" -q "$encrypted" -t "$tag_data" 2> /dev/null)
 
 #			printdebug
 			check_fail "fail"

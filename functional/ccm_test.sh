@@ -118,7 +118,7 @@ function ccm_test()
         touch /tmp/$data_file.txt
         touch /tmp/$decr_file.txt
 
-	for (( iter=1;iter<$user_input;iter++ ))
+	for (( iter=0;iter<$user_input;iter++ ))
 	{
 		for data_item in "${plain_data[@]}"
 		do
