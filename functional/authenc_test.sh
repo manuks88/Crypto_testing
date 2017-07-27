@@ -1,8 +1,9 @@
 #!/bin/bash
 #Authenc has 4 parts in the key, the static_Key,encryption key size identifier,HMAC key and then the cipher key
 #Easiest cipher, take data and encrypt using key, decrypt using the encypted text.
-#IV cannot be null.
+#IV cannot be null and should be > 1.
 #Assoc and Tag can be null.
+#Supported tag sizes are 4,6,10,12,14. Rest tag sizes when used Error field in crypto stats will increment.
 
 if [ $# -ne 1 ]
 then
@@ -98,7 +99,7 @@ function authenc_test()
         touch /tmp/$decr_file.txt
 
 	iv_size=$(( RANDOM % 100 ))
-	if [ $iv_size != 0 ]
+	if [[ $iv_size != 0 && $iv_size != 1 ]]
 	then
 	{
 		iv=$(tr -c -d "0-9a-f" < /dev/urandom | head -c $iv_size)
