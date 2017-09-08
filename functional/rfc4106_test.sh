@@ -45,7 +45,8 @@ declare -a tag_leng=("8" "12" "16")
 readarray data_input < $(pwd)/data_file.txt
 
 #Test Binary path
-KCAPI="/root/libkcapi-0.13.0/test/kcapi"
+KCAPI="/usr/local/bin/kcapi"
+#KCAPI="/root/libkcapi-0.13.0/test/kcapi"
 #KCAPI="/root/Documents/libkcapi-0.13.0/test/kcapi"
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -154,6 +155,8 @@ function rfc4106_test()
 
 			check_fail "fail"
 			check_fail "WR"
+                        check_fail "trace"
+                        check_fail "chcr:"
 
 			echo "$dec"|grep -i "fail" > /dev/null
 			if [ $? == "0" ]

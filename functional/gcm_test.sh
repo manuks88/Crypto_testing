@@ -52,7 +52,8 @@ declare -a assoc_leng=("1" "2" "3" "4" "5" "6" "7" "8")
 readarray data_input < $(pwd)/data_file.txt
 
 #Test Binary path
-KCAPI="/root/libkcapi-0.13.0/test/kcapi"
+KCAPI="/usr/local/bin/kcapi"
+#KCAPI="/root/libkcapi-0.13.0/test/kcapi"
 #KCAPI="/root/Documents/libkcapi-0.13.0/test/kcapi"
 #----------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -148,6 +149,8 @@ function gcm_test()
 
 			check_fail "fail"
 			check_fail "WR"
+                        check_fail "trace"
+                        check_fail "chcr:"
 
 			echo "$dec"|grep -i "fail" > /dev/null
 			if [ $? == "0" ]
