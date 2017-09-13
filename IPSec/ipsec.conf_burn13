@@ -1,0 +1,20 @@
+config setup
+	strictcrlpolicy=no
+
+conn %default
+        ikelifetime=60m
+        keylife=20m
+        rekeymargin=3m
+        keyingtries=1
+	aggressive=yes
+        keyexchange=ikev2
+
+conn beagle-burn
+        left=10.1.1.58
+        leftcert=host2Cert.der
+        leftid="C=CH, O=Strongswan, CN=host2"
+        leftfirewall=no
+        right=10.1.1.56
+        rightid="C=CH, O=Strongswan, CN=host1"
+        type=transport
+        auto=add
