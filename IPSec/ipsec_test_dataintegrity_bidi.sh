@@ -57,18 +57,17 @@ all_algo=('ah=sha1!' 'ah=sha256!' 'ah=sha384!' 'ah=sha512!' 'ah=sha256_96'
           'esp=aes128gcm96-sha512!' 'esp=aes192gcm96-sha512!' 'esp=aes256gcm96-sha512!' \
           'esp=aes128gcm128-sha512!' 'esp=aes192gcm128-sha512!' 'esp=aes256gcm128-sha512!' \
           'esp=aes128ctr!' 'esp=aes192ctr!' 'esp=aes256ctr!')
-#all_algo=('ah=sha1!' 'ah=sha256!' 'ah=sha384!' 'ah=sha512!')
-#all_algo=('esp=aes128!')
+
 function test
 {
 	ibq_initial=`cat $debugfs_path/ibq* | grep ": 6d" | awk -F ' ' '{print $4}'`
 	tcpdump -i enp7s0f4d1 -c 10 -w pcap_files/$2.pcap $3 &
-	ssh $1 "cd /root/scripts/; sh blast_server.sh $4 30"
+	ssh $1 "cd /root/scripts/; sh blast_server.sh $4 300"
 	cd /root/scripts/
-	sh blast_client.sh $4 30
-	sh blast_server.sh $5 30
-	ssh $1 "cd /root/scripts/; sh blast_client.sh $5 30"
-	sleep 60
+	sh blast_client.sh $4 300
+	sh blast_server.sh $5 300
+	ssh $1 "cd /root/scripts/; sh blast_client.sh $5 300"
+	sleep 320
 	ibq_cur=`cat $debugfs_path/ibq* | grep ": 6d" | awk -F ' ' '{print $4}'`
 #	USE TIMESTOP FOR BLAST TEST ON BOTH SERVER and CLIENT, but using this as insurance :)
         tool_count=`ps -ef|grep -i blast|wc -l`
@@ -159,7 +158,7 @@ do
 		ipsec stop >> log_ipsec/$logname.log
 	}
 	fi
-	echo "Kill stale Blast instances" >> tee -a log_ipsec/$logname.log
+	echo "Kill stale Blast instances" | tee -a log_ipsec/$logname.log
 	killall -g blast
 	ssh $client_corp "killall -g blast"
 	echo "######### Bring Down Connection #########" >> log_ipsec/$logname.log

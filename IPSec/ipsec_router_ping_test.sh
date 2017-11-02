@@ -145,7 +145,7 @@ do
 		ipsec stop >> log_ipsec/$logname.log
 	}
 	fi
-	echo "Kill stale Blast instances" >> tee -a log_ipsec/$logname.log
+	echo "Kill stale Blast instances" | tee -a log_ipsec/$logname.log
 	killall -g blast
 	ssh $DUT_corp "killall -g blast"
 	echo "######### Bring Down Connection #########" >> log_ipsec/$logname.log

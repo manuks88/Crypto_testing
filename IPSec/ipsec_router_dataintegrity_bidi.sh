@@ -90,6 +90,13 @@ function test
                 done
         }
 	fi
+	if [ $(dmesg | grep -i DMAR) ]
+	then
+	{
+		echo -e "DMA errors."
+		exit 1
+	}
+	fi
 	ssh $1 "cd /root/scripts/; cat BSB_*|grep -i \"data error\"" > /dev/null
 	if [ $? -ne 1 ]
 	then
@@ -156,7 +163,7 @@ do
 		ipsec stop >> log_ipsec/$logname.log
 	}
 	fi
-	echo "Kill stale Blast instances" >> tee -a log_ipsec/$logname.log
+	echo "Kill stale Blast instances" | tee -a log_ipsec/$logname.log
 	killall -g blast
 	ssh $DUT_corp "killall -g blast"
 	echo "######### Bring Down Connection #########" >> log_ipsec/$logname.log
