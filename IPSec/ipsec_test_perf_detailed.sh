@@ -29,7 +29,34 @@ all_algo=('ah=sha1!' 'ah=sha256!' 'ah=sha384!' 'ah=sha512!' 'ah=sha256_96'
           'esp=aes128-sha1!' 'esp=aes192-sha1!' 'esp=aes256-sha1!' \
           'esp=aes128-sha256!' 'esp=aes192-sha256!' 'esp=aes256-sha256!' \
           'esp=aes128-sha384!' 'esp=aes192-sha384!' 'esp=aes256-sha384!' \
-          'esp=aes128-sha512!' 'esp=aes192-sha512!' 'esp=aes256-sha512!')
+          'esp=aes128-sha512!' 'esp=aes192-sha512!' 'esp=aes256-sha512!' \
+          'esp=aes128ccm64-sha1!' 'esp=aes192ccm64-sha1!' 'esp=aes256ccm64-sha1!' \
+          'esp=aes128ccm96-sha1!' 'esp=aes192ccm96-sha1!' 'esp=aes256ccm96-sha1!' \
+          'esp=aes128ccm128-sha1!' 'esp=aes192ccm128-sha1!' 'esp=aes256ccm128-sha1!' \
+          'esp=aes128ccm64-sha256!' 'esp=aes192ccm64-sha256!' 'esp=aes256ccm64-sha256!' \
+          'esp=aes128ccm96-sha256!' 'esp=aes192ccm96-sha256!' 'esp=aes256ccm96-sha256!' \
+          'esp=aes128ccm128-sha256!' 'esp=aes192ccm128-sha256!' 'esp=aes256ccm128-sha256!' \
+          'esp=aes128ccm64-sha384!' 'esp=aes192ccm64-sha384!' 'esp=aes256ccm64-sha384!' \
+          'esp=aes128ccm96-sha384!' 'esp=aes192ccm96-sha384!' 'esp=aes256ccm96-sha384!' \
+          'esp=aes128ccm128-sha384!' 'esp=aes192ccm128-sha384!' 'esp=aes256ccm128-sha384!' \
+          'esp=aes128ccm64-sha512!' 'esp=aes192ccm64-sha512!' 'esp=aes256ccm64-sha512!' \
+          'esp=aes128ccm96-sha512!' 'esp=aes192ccm96-sha512!' 'esp=aes256ccm96-sha512!' \
+          'esp=aes128ccm128-sha512!' 'esp=aes192ccm128-sha512!' 'esp=aes256ccm128-sha512!' \
+          'esp=aes128gcm64-sha1!' 'esp=aes192gcm64-sha1!' 'esp=aes256gcm64-sha1!' \
+          'esp=aes128gcm96-sha1!' 'esp=aes192gcm96-sha1!' 'esp=aes256gcm96-sha1!' \
+          'esp=aes128gcm128-sha1!' 'esp=aes192gcm128-sha1!' 'esp=aes256gcm128-sha1!' \
+          'esp=aes128gcm64-sha256!' 'esp=aes192gcm64-sha256!' 'esp=aes256gcm64-sha256!' \
+          'esp=aes128gcm64-sha256!' 'esp=aes192gcm64-sha256!' 'esp=aes256gcm64-sha256!' \
+          'esp=aes128gcm96-sha256!' 'esp=aes192gcm96-sha256!' 'esp=aes256gcm96-sha256!' \
+          'esp=aes128gcm128-sha256!' 'esp=aes192gcm128-sha256!' 'esp=aes256gcm128-sha256!' \
+          'esp=aes128gcm64-sha384!' 'esp=aes192gcm64-sha384!' 'esp=aes256gcm64-sha384!' \
+          'esp=aes128gcm96-sha384!' 'esp=aes192gcm96-sha384!' 'esp=aes256gcm96-sha384!' \
+          'esp=aes128gcm128-sha384!' 'esp=aes192gcm128-sha384!' 'esp=aes256gcm128-sha384!' \
+          'esp=aes128gcm64-sha512!' 'esp=aes192gcm64-sha512!' 'esp=aes256gcm64-sha512!' \
+          'esp=aes128gcm96-sha512!' 'esp=aes192gcm96-sha512!' 'esp=aes256gcm96-sha512!' \
+          'esp=aes128gcm128-sha512!' 'esp=aes192gcm128-sha512!' 'esp=aes256gcm128-sha512!' \
+          'esp=aes128ctr!' 'esp=aes192ctr!' 'esp=aes256ctr!')
+
 
 function test
 {
