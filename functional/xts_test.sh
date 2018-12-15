@@ -1,5 +1,5 @@
 #!/bin/bash
-#CBC supports 256 and 512 bit keys ie for AES128 and AES256 respectively.
+#XTS supports 256 384 and 512 bit keys ie for AES128 and AES256 respectively.
 #Easiest cipher, take data and encrypt using key, decrypt using the encypted text.
 #IV can be null.
 
@@ -23,9 +23,10 @@ GREEN="\x1B[01;92m"
 end="\x1B[0m"
 
 key_256="45143780502c90cc11055ea65f1e016fb04c35b4d11b8c8d829843a310feda9d"
+key_384="abc1cbb8aa76a4a0414a0385803286baae10110fe8106a98b53afd60a2e746d3d832c76e4f83f14f458011a2a847315f"
 key_512="f7e573d4da909e174bc7efe38b799a9c4b49691bda504fdd76d20b39e2ec48a74304a9aea126fea34a300c7abf0ecc3093443ffb6bf0188da021ccbf8e55e39c"
 
-declare -a key_leng=("256" "512")
+declare -a key_leng=("256" "384" "512")
 #declare -a data_input=("18913843a33d6e8f9b1aa033d8803730")
 readarray data_input < $(pwd)/data_file.txt
 
